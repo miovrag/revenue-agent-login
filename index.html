@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#9b6fd4"/>
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a0a3e"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="msapplication-TileColor" content="#7367F0"/>
+<title>CustomGPT.ai | The Ethereal Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#643e24",
+              "primary-fixed": "#e6deff",
+              "outline-variant": "#bfc9c1",
+              "on-secondary-fixed": "#002113",
+              "on-primary-fixed-variant": "#4816cb",
+              "on-surface": "#171d1b",
+              "tertiary": "#7f5539",
+              "secondary-fixed-dim": "#8dd6b0",
+              "primary-container": "#d6ccff",
+              "surface-container-high": "#e3eae6",
+              "on-primary-container": "#5c37de",
+              "surface-container-highest": "#dee4e0",
+              "on-error": "#ffffff",
+              "surface-tint": "#7367F0",
+              "primary": "#7367F0",
+              "on-surface-variant": "#3f4943",
+              "tertiary-fixed": "#ffdcc7",
+              "inverse-surface": "#2b322f",
+              "secondary": "#206b4c",
+              "inverse-on-surface": "#ecf2ee",
+              "on-secondary": "#ffffff",
+              "error": "#ba1a1a",
+              "surface-bright": "#f5fbf7",
+              "secondary-container": "#a8f2cb",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#cabeff",
+              "on-tertiary-fixed": "#301401",
+              "surface-container-low": "#eff5f1",
+              "on-secondary-fixed-variant": "#005236",
+              "tertiary-container": "#ffc7a4",
+              "secondary-fixed": "#a8f2cb",
+              "inverse-primary": "#cabeff",
+              "tertiary-fixed-dim": "#f2bb99",
+              "surface-dim": "#d5dbd8",
+              "surface-variant": "#dee4e0",
+              "on-secondary-container": "#287152",
+              "outline": "#6f7972",
+              "on-primary-fixed": "#1c0062",
+              "background": "#f5fbf7",
+              "surface-container": "#e9efeb",
+              "error-container": "#ffdad6",
+              "surface": "#f5fbf7",
+              "on-tertiary-container": "#7a5135",
+              "on-background": "#171d1b",
+              "on-error-container": "#93000a"
+            },
+            fontFamily: {
+              "headline": ["Manrope", "sans-serif"],
+              "body": ["Manrope", "sans-serif"],
+              "label": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        html {
+            background-color: #9b6fd4;
+        }
+        *:not(.material-symbols-outlined) {
+            font-family: 'Manrope', sans-serif !important;
+        }
+        body {
+            background-color: #9b6fd4;
+            background-image: url('bg.webp');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Manrope', sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+        @media (prefers-color-scheme: dark) {
+            html { background-color: #1a0a3e; }
+            body { background-color: #1a0a3e; background-image: url('bg-dark.webp'); }
+            #siteLogo { filter: brightness(0) invert(1) !important; }
+        }
+        .ease-ethereal {
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-effect {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        .ambient-shadow {
+            box-shadow: 0 8px 32px 0 rgba(23, 29, 27, 0.06);
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+        @keyframes shimmer {
+          0% { background-position: 200% center; }
+          100% { background-position: -200% center; }
+        }
+        .animate-shimmer {
+          background: linear-gradient(90deg, #6b7280 0%, #d1d5db 50%, #6b7280 100%);
+          background-size: 200% auto;
+          color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: shimmer 3s linear infinite;
+          display: inline-block;
+        }
+        @keyframes shimmer-text {
+          0% { background-position: 200% center; }
+          100% { background-position: -200% center; }
+        }
+        .animate-text-shimmer {
+          background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 45%, rgba(0,0,0,0.4) 55%, rgba(0,0,0,0.4) 100%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: shimmer-text 6s linear infinite;
+        }
+        /* Burst pop entrance */
+        @keyframes elegant-rise {
+          0%   { transform: translateY(20px) scale(0.88); opacity: 0; filter: blur(6px); }
+          60%  { filter: blur(0px); }
+          100% { transform: translateY(0) scale(1); opacity: 1; filter: blur(0px); }
+        }
+        .burst-pop {
+          animation: elegant-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Live pulse ring */
+        @keyframes live-pulse {
+          0% { transform: scale(1); opacity: 0.75; }
+          70% { transform: scale(1.7); opacity: 0; }
+          100% { transform: scale(1.7); opacity: 0; }
+        }
+        @keyframes live-pulse-2 {
+          0% { transform: scale(1); opacity: 0.5; }
+          70% { transform: scale(2.1); opacity: 0; }
+          100% { transform: scale(2.1); opacity: 0; }
+        }
+        .live-pulse::before,
+        .live-pulse::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 9999px;
+          background-color: #7367F0;
+          z-index: -1;
+        }
+        @media (prefers-color-scheme: dark) {
+          .live-pulse::before,
+          .live-pulse::after { background-color: #a99ff8; }
+        }
+        .live-pulse::before {
+          animation: live-pulse 2s ease-out infinite;
+        }
+        .live-pulse::after {
+          animation: live-pulse-2 2s ease-out infinite 0.4s;
+        }
+        /* Chat modal */
+        .chat-modal {
+          transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        .chat-modal.hidden-modal {
+          opacity: 0;
+          transform: translateY(12px) scale(0.97);
+          pointer-events: none;
+        }
+        /* Typing dots */
+        @keyframes dot-bounce {
+          0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+          40% { transform: translateY(-5px); opacity: 1; }
+        }
+        .dot { animation: dot-bounce 1.2s infinite; display: inline-block; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+        /* Unread badge */
+        @keyframes badge-pop {
+          0% { transform: scale(0); }
+          70% { transform: scale(1.2); }
+          100% { transform: scale(1); }
+        }
+        .badge-pop { animation: badge-pop 0.3s ease forwards; }
+
+        .popular-pill {
+          transition: padding-left 0.2s cubic-bezier(0.4,0,0.2,1);
+        }
+        .popular-pill:hover {
+          padding-left: 32px;
+        }
+        .chat-link {
+          color: #7367F0;
+          font-weight: 600;
+          text-decoration: underline;
+          text-decoration-color: rgba(108,99,255,0.35);
+          text-underline-offset: 2px;
+        }
+        .chat-link:hover { text-decoration-color: #7367F0; }
+        .msg-actions {
+          display: flex;
+          gap: 2px;
+          margin-top: 4px;
+          opacity: 0;
+          transition: opacity 0.15s ease;
+        }
+        .msg-wrap:hover .msg-actions { opacity: 1; }
+        .msg-action-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 3px 5px;
+          border-radius: 4px;
+          color: rgba(0,0,0,0.3);
+          font-size: 13px;
+          line-height: 1;
+          transition: background 0.12s ease, color 0.12s ease;
+        }
+        .msg-action-btn:hover { background: rgba(0,0,0,0.06); color: rgba(0,0,0,0.6); }
+        .msg-action-btn.active-up { color: #22c55e; }
+        .msg-action-btn.active-down { color: #ef4444; }
+
+        /* Send button states */
+        #sendBtn {
+          width: 34px; height: 34px; border-radius: 50%; border: none;
+          background: #c4c4c4;
+          cursor: not-allowed;
+          display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+          transition: background 0.18s ease, transform 0.1s ease;
+        }
+        #sendBtn.active  { background: #6357d9; cursor: pointer; }
+        #sendBtn.loading { background: #6357d9; cursor: default; }
+        #sendBtn.active:hover  { background: #4740cc; transform: scale(1.06); }
+        #sendBtn .send-icon  { transition: opacity 0.15s ease; }
+        #sendBtn.loading .send-icon { opacity: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes blink-cursor { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+        .close-btn { transition: background 0.2s cubic-bezier(0.4,0,0.2,1), transform 0.2s cubic-bezier(0.4,0,0.2,1); }
+        .close-btn:hover { background: rgba(255,255,255,0.28) !important; transform: scale(1.1); }
+        @keyframes job-flick {
+          0%   { opacity: 0; transform: translateY(6px); }
+          15%  { opacity: 1; transform: translateY(0); }
+          75%  { opacity: 1; transform: translateY(0); }
+          90%  { opacity: 0; transform: translateY(-6px); }
+          100% { opacity: 0; transform: translateY(-6px); }
+        }
+        .agent-job { animation: job-flick 1.8s ease-in-out forwards; }
+        #poweredBy { opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
+        #inputArea { transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #widgetInput::placeholder { color: rgba(0,0,0,0.35); }
+        #sendBtn .send-spinner {
+          position: absolute;
+          width: 14px; height: 14px;
+          border: 2px solid rgba(255,255,255,0.35);
+          border-top-color: white;
+          border-radius: 50%;
+          animation: spin 0.7s linear infinite;
+          opacity: 0;
+          transition: opacity 0.15s ease;
+        }
+        #sendBtn.loading .send-spinner { opacity: 1; }
+        #sendBtn { position: relative; }
+        .tooltip-wrap { position: absolute; top: 14px; right: 14px; z-index: 10; }
+        #floatingTooltip {
+          position: fixed;
+          background: rgba(23,29,27,0.85);
+          color: white;
+          font-size: 11px;
+          font-weight: 600;
+          font-family: Manrope, sans-serif;
+          padding: 4px 8px;
+          border-radius: 4px;
+          white-space: nowrap;
+          pointer-events: none;
+          z-index: 9999;
+          opacity: 0;
+          transition: opacity 0.15s ease;
+        }
+
+        /* ── Single chat widget ── */
+        /* Avatar — always fixed, never moves */
+        #widgetAvatar {
+          position: fixed;
+          bottom: 40px;
+          right: 40px;
+          z-index: 70;
+          cursor: pointer;
+          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #widgetAvatar:hover {
+          transform: scale(1.13) translateY(-3px);
+        }
+
+        /* Glow cursor */
+        #cursorGlow {
+          position: absolute;
+          inset: 0;
+          border-radius: 16px;
+          pointer-events: none;
+          z-index: 1;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          background: radial-gradient(circle 120px at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 70%);
+        }
+        #chatWidget.expanded:hover #cursorGlow { opacity: 1; }
+
+        /* Widget */
+        #chatWidget {
+          position: fixed;
+          bottom: 40px;
+          right: 96px;
+          width: 250px;
+          height: 56px;
+          border-radius: 16px;
+          background: transparent;
+          overflow: visible;
+          transition: background-color 0.15s ease;
+          z-index: 60;
+        }
+        :root { --Radius-Semantic-radius-semantic-xl: 16px; }
+        #chatWidget.expanded {
+          width: clamp(380px, 26vw, 520px);
+          height: min(clamp(620px, 72vh, 780px), calc(100dvh - 60px));
+          min-height: 540px;
+          min-width: 300px;
+          max-width: min(700px, calc(100vw - 40px));
+          max-height: calc(100dvh - 40px);
+          border-radius: 16px;
+          border-top: 2px solid rgba(238, 242, 241, 0.50);
+          background: #7367F0;
+          overflow: visible;
+          box-shadow: 0 158px 44px 0 rgba(0,0,0,0.00), 0 101px 40px 0 rgba(0,0,0,0.01), 0 57px 34px 0 rgba(0,0,0,0.05), 0 25px 25px 0 rgba(0,0,0,0.09), 0 6px 14px 0 rgba(0,0,0,0.10);
+        }
+
+
+        /* Resize handle — sits outside expandedView, overflows widget */
+        #resizeHandle {
+          display: none;
+          position: absolute;
+          top: -5px; left: -5px;
+          width: 28px; height: 28px;
+          cursor: nw-resize;
+          z-index: 200;
+          pointer-events: auto;
+        }
+        #resizeHandle::before {
+          content: '';
+          position: absolute;
+          top: 7px; left: 7px;
+          width: 10px; height: 10px;
+          border-top: 2.5px solid rgba(255,255,255,0.6);
+          border-left: 2.5px solid rgba(255,255,255,0.6);
+          border-radius: 3px 0 0 0;
+        }
+        #chatWidget.expanded #resizeHandle { display: none; }
+        @media (max-width: 767px) { #resizeHandle { display: none !important; } }
+
+        /* Collapsed bubble */
+        #collapsedView {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+        }
+        #chatWidget.expanded #collapsedView {
+          pointer-events: none;
+        }
+
+        /* Expanded panel */
+        #expandedView {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          opacity: 0;
+          pointer-events: none;
+          border-radius: 16px;
+          overflow: hidden;
+          background: #7367F0;
+        }
+        #chatWidget.expanded #expandedView {
+          pointer-events: auto;
+        }
+
+        /* ── Compact welcome header on short windows ── */
+        .welcome-header { display: flex; flex-direction: column; align-items: center; }
+        @media (max-height: 640px) {
+          .welcome-avatar { width: 56px !important; height: 56px !important; margin-bottom: 8px !important; border: 0 !important; }
+          .welcome-name   { font-size: 14px !important; }
+          .welcome-tag    { font-size: 10px !important; padding: 2px 6px !important; }
+          .welcome-name-row { margin-bottom: 14px !important; }
+          #welcomeView    { padding-top: 40px !important; }
+        }
+        @media (max-height: 560px) {
+          .welcome-avatar { width: 44px !important; height: 44px !important; margin-bottom: 6px !important; }
+          .welcome-name   { font-size: 13px !important; }
+          #welcomeView    { padding-top: 32px !important; }
+        }
+        @media (max-height: 500px) {
+          .welcome-header { flex-direction: row !important; justify-content: center; gap: 10px; align-items: center; }
+          .welcome-avatar { width: 28px !important; height: 28px !important; margin-bottom: 0 !important; flex-shrink: 0; border: 0 !important; }
+          .welcome-name-row { flex-direction: column !important; align-items: flex-start !important; margin-bottom: 12px !important; gap: 3px !important; }
+          .welcome-name { font-size: 12px !important; }
+          .welcome-tag  { font-size: 9px !important; padding: 1px 5px !important; }
+          #welcomeView  { padding-top: 24px !important; }
+        }
+
+        /* ── Compact input bar on short windows ── */
+        @media (max-height: 800px) {
+          #widgetInput { font-size: 13px !important; }
+          #inputArea { padding: 3px 3px 3px 10px !important; }
+          #sendBtn { width: 24px !important; height: 24px !important; }
+          #sendBtn .send-icon { font-size: 13px !important; }
+          #sendBtn .send-spinner { width: 11px !important; height: 11px !important; }
+        }
+
+        /* ── Mobile fullscreen chat ── */
+        @media (max-width: 767px) {
+          #chatWidget { bottom: 24px; right: 20px; }
+          #chatWidget.expanded {
+            top: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            right: 0 !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            min-width: 0 !important;
+            height: 100dvh !important;
+            border-radius: 0 !important;
+            border-top: none !important;
+            overflow: hidden !important;
+          }
+          #chatWidget.expanded #expandedView {
+            border-radius: 0 !important;
+          }
+          #widgetAvatar { bottom: 24px; right: 20px; }
+          /* Larger close button touch target on mobile */
+          .close-btn { width: 40px !important; height: 40px !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-center items-center">
+<!-- Top-left logo -->
+<div style="position:fixed; top:24px; left:32px; z-index:50;">
+  <img id="siteLogo" src="logo.svg" alt="Logo" style="height:24px; width:auto; display:block; filter: brightness(0) saturate(0) brightness(0.25);" />
+</div>
+<!-- Avatar — always visible, never moves -->
+<div id="widgetAvatar" onclick="toggleWidget()" style="opacity:0; transition: opacity 0.6s ease;">
+  <div class="live-pulse" style="position:relative; width:44px; height:44px; border-radius:50%;">
+    <img src="avatar.png" style="width:44px; height:44px; border-radius:50%; object-fit:cover; display:block;"/>
+  </div>
+  <div id="unreadBadge" style="display:none; position:absolute; top:-6px; right:-6px; min-width:18px; height:18px; background:#ef4444; border-radius:9999px; align-items:center; justify-content:center; padding:0 4px;">
+    <span id="unreadCount" style="color:white; font-size:10px; font-weight:700; line-height:1;"></span>
+  </div>
+</div>
+
+<!-- Single Chat Widget -->
+<div id="chatWidget" style="opacity:0; transition: opacity 0.6s ease;">
+
+  <!-- ── Collapsed launcher ── -->
+  <div id="collapsedView">
+    <div onclick="openWidget()" style="background:rgba(255,255,255,0.82); backdrop-filter:blur(12px); box-shadow:0 8px 32px rgba(23,29,27,0.06); border-radius:16px; padding:12px 16px; cursor:pointer; transition:transform 0.2s ease;" onmouseover="this.style.transform='scale(0.98)'" onmouseout="this.style.transform='scale(1)'">
+      <p style="font-size:13px; font-weight:600; color:#171d1b; margin:0 0 4px; white-space:nowrap;">How can CustomGPT.ai help my business?</p>
+      <span class="animate-text-shimmer" style="font-size:11px; font-weight:500;">Tap to ask</span>
+    </div>
+  </div>
+
+  <!-- ── Cursor glow overlay ── -->
+  <div id="cursorGlow"></div>
+
+  <!-- ── Resize handle (top-left corner, outside expandedView so it can overflow) ── -->
+  <div id="resizeHandle"></div>
+
+  <!-- ── Expanded panel ── -->
+  <div id="expandedView">
+
+    <!-- Close -->
+    <!-- Header action bar -->
+    <div style="position:absolute; top:14px; right:14px; z-index:10; display:flex; gap:4px; align-items:center;">
+      <!-- Login / Logout — visibility gated by agent config (see authConfig).
+           Shown when the agent is public AND the visitor benefits from signing in:
+           end-user history is available OR guests have a limited message allowance.
+           Present in every chat state (with and without a conversation). -->
+      <button id="authBtn" onclick="toggleAuth()"
+        onmouseenter="showTooltip(this, isLoggedIn ? 'Log out' : 'Log in')" onmouseleave="hideTooltip()"
+        class="close-btn" style="display:none; width:32px; height:32px; border-radius:50%; border:none; background:rgba(255,255,255,0.15); cursor:pointer; align-items:center; justify-content:center;">
+        <span id="authIcon" class="material-symbols-outlined" style="color:white; font-size:18px; font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20;">login</span>
+      </button>
+      <button onclick="shareConvo()"
+        onmouseenter="showTooltip(this,'Share')" onmouseleave="hideTooltip()"
+        class="close-btn" style="width:32px; height:32px; border-radius:50%; border:none; background:rgba(255,255,255,0.15); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+        <span class="material-symbols-outlined" style="color:white; font-size:18px; font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20;">share</span>
+      </button>
+      <button onclick="downloadConvo()"
+        onmouseenter="showTooltip(this,'Download')" onmouseleave="hideTooltip()"
+        class="close-btn" style="width:32px; height:32px; border-radius:50%; border:none; background:rgba(255,255,255,0.15); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+        <span class="material-symbols-outlined" style="color:white; font-size:18px; font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20;">download</span>
+      </button>
+      <button onclick="resetConvo()"
+        onmouseenter="showTooltip(this,'Reset')" onmouseleave="hideTooltip()"
+        class="close-btn" style="width:32px; height:32px; border-radius:50%; border:none; background:rgba(255,255,255,0.15); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+        <span class="material-symbols-outlined" style="color:white; font-size:18px; font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20;">refresh</span>
+      </button>
+      <button onclick="closeWidget()"
+        onmouseenter="showTooltip(this,'Close')" onmouseleave="hideTooltip()"
+        class="close-btn" style="width:32px; height:32px; border-radius:50%; border:none; background:rgba(255,255,255,0.15); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+        <span class="material-symbols-outlined" style="color:white; font-size:20px;">keyboard_arrow_down</span>
+      </button>
+    </div>
+
+    <!-- Welcome view -->
+    <div id="welcomeView" style="display:flex; flex-direction:column; align-items:center; padding:56px 16px 100px; flex:1; min-height:0; overflow-y:auto;">
+      <div class="welcome-header">
+        <div class="welcome-avatar" style="width:80px; height:80px; border-radius:50%; overflow:hidden; border:0; margin-bottom:12px; box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+          <img src="avatar.png" style="width:100%; height:100%; object-fit:cover;" alt="Alden"/>
+        </div>
+        <div class="welcome-name-row" style="display:flex; align-items:center; gap:8px; margin-bottom:24px;">
+          <p class="welcome-name" style="color:white; font-weight:700; font-size:17px; margin:0; font-family:Manrope,sans-serif;">Alden</p>
+          <span class="welcome-tag" style="background:rgba(255,255,255,0.2); color:white; font-size:11px; font-weight:600; font-family:Manrope,sans-serif; padding:3px 8px; border-radius:4px; letter-spacing:0.03em;">AI Agent</span>
+        </div>
+      </div>
+      <div style="width:100%; background:rgba(255,255,255,0.92); border-radius:16px; padding:16px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+          <span class="material-symbols-outlined" style="color:#6f7972; font-size:20px;">chat_bubble_outline</span>
+          <p style="font-weight:600; font-size:15px; color:#171d1b; margin:0; font-family:Manrope,sans-serif;">Popular questions</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button onclick="sendPopular('How does it work?')" class="popular-pill" style="text-align:left; background:#7367F0; border:none; border-radius:16px; padding:12px 16px; font-size:14px; font-weight:500; color:#ffffff; cursor:pointer; font-family:Manrope,sans-serif;">How does it work?</button>
+          <button onclick="sendPopular('See pricing')" class="popular-pill" style="text-align:left; background:#7367F0; border:none; border-radius:16px; padding:12px 16px; font-size:14px; font-weight:500; color:#ffffff; cursor:pointer; font-family:Manrope,sans-serif;">See pricing</button>
+          <button onclick="sendPopular('Talk to sales')" class="popular-pill" style="text-align:left; background:#7367F0; border:none; border-radius:16px; padding:12px 16px; font-size:14px; font-weight:500; color:#ffffff; cursor:pointer; font-family:Manrope,sans-serif;">Talk to sales</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages view -->
+    <div id="messagesView" style="display:none; flex:1; min-height:0; overflow-y:auto; padding:56px 16px 140px; flex-direction:column; gap:10px;"></div>
+
+    <!-- Input bar — overlays messages -->
+    <div id="inputArea" style="position:absolute; bottom:28px; left:16px; right:16px; border-radius:16px; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.6); display:flex; align-items:flex-end; padding:6px 6px 6px 16px; z-index:10;">
+      <textarea id="widgetInput" rows="1" placeholder="Ask me anything about CustomGPT.ai"
+        style="flex:1; border:none; outline:none; box-shadow:none; -webkit-appearance:none; background:transparent; font-size:13px; color:#1a1a2e; font-weight:500; resize:none; overflow-y:auto; line-height:1.5; max-height:calc(1.5em * 7 + 0px); padding:0; margin:4px 0;"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendWidgetMessage();}"></textarea>
+      <button id="sendBtn" onclick="sendWidgetMessage()">
+        <span class="material-symbols-outlined send-icon" style="color:white; font-size:17px;">arrow_upward</span>
+        <span class="send-spinner"></span>
+      </button>
+    </div>
+    <!-- Powered-by footer -->
+    <div id="poweredBy" style="opacity:0; transition:opacity 0.2s ease; pointer-events:none; position:absolute; bottom:4px; left:0; right:0; height:24px; display:flex; align-items:center; justify-content:center; z-index:10;">
+      <span style="font-size:11px; font-weight:500; color:rgba(255,255,255,0.38); letter-spacing:0.01em;">Powered by <a href="https://customgpt.ai" target="_blank" style="color:rgba(255,255,255,0.5); text-decoration:none; font-weight:600;">CustomGPT.ai</a></span>
+    </div>
+
+  </div>
+</div>
+<!-- Hidden Footer as per Shared Components Logic - Suppressed for Splash/Focus Screen -->
+<footer class="hidden">
+<div class="w-full py-10 mt-auto bg-[#f5fbf7] dark:bg-[#0a120e]">
+<div class="max-w-screen-xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="text-2xl font-black text-[#7367F0]">CustomGPT.ai</div>
+<div class="flex gap-4">
+<span class="text-[#206b4c] dark:text-[#99E2BC] opacity-70 font-manrope text-sm font-medium tracking-tight hover:text-[#7367F0] transition-all duration-300 ease-ethereal cursor-pointer">Privacy Policy</span>
+<span class="text-[#206b4c] dark:text-[#99E2BC] opacity-70 font-manrope text-sm font-medium tracking-tight hover:text-[#7367F0] transition-all duration-300 ease-ethereal cursor-pointer">Terms of Service</span>
+</div>
+<div class="text-[#206b4c] dark:text-[#99E2BC] opacity-70 font-manrope text-sm font-medium tracking-tight">
+                © 2024 CustomGPT.ai. The Ethereal Interface.
+            </div>
+</div>
+</div>
+</footer>
+
+<div id="floatingTooltip"></div>
+
+<script>
+  const widget       = document.getElementById('chatWidget');
+  const collapsedView = document.getElementById('collapsedView');
+  const expandedView  = document.getElementById('expandedView');
+  const welcomeView   = document.getElementById('welcomeView');
+  const messagesView  = document.getElementById('messagesView');
+  const widgetInput   = document.getElementById('widgetInput');
+  const sendBtn       = document.getElementById('sendBtn');
+  const badge         = document.getElementById('unreadBadge');
+  const countEl       = document.getElementById('unreadCount');
+
+  let isOpen = false;
+  let inConvo = false;
+  let unread = 0;
+  let sessionBotMsgs = 0;
+  let lastUserMsg = '';
+  let turnCount = 0;
+  let hasClickedLink = false;
+
+  // ── CustomGPT.ai API ───────────────────────────────────────────
+  const CGPT_API = 'https://app.customgpt.ai/api/v1';
+  const CGPT_KEY = '9880|YSnLMjPpxk1kiikCx8OaifPypixnC23U3ieuo5Xw3686cf73';
+  const CGPT_PID = '77058';
+  let cgptSessionId = null;
+
+  // ── Auth (login / logout) ──────────────────────────────────────
+  // Two cases let a visitor benefit from signing in even on a PUBLIC agent:
+  //   • the account has end-user limits set (guest allowance isn't unlimited), or
+  //   • the agent has conversation history available.
+  // The login/logout control is therefore shown only when:
+  //   agent is public AND (end-user history is NOT hidden OR guest limit is NOT unlimited).
+  // These flags mirror the deployment settings exposed on
+  // Share Link / Embed / Live Chat / Website Copilot.
+  const authConfig = {
+    agentIsPublic:        true,   // Agent is public
+    endUserHistoryHidden: false,  // "End-user conversation history" set to hidden?
+    guestLimitUnlimited:  false,  // End-user limit for Guests = Unlimited?
+  };
+  const CGPT_LOGIN_URL = 'https://app.customgpt.ai/login';
+  let isLoggedIn = false;
+
+  function shouldShowAuth() {
+    return authConfig.agentIsPublic &&
+      (!authConfig.endUserHistoryHidden || !authConfig.guestLimitUnlimited);
+  }
+
+  function renderAuthBtn() {
+    const btn  = document.getElementById('authBtn');
+    const icon = document.getElementById('authIcon');
+    if (!shouldShowAuth()) { btn.style.display = 'none'; return; }
+    btn.style.display = 'flex';
+    icon.textContent = isLoggedIn ? 'logout' : 'login';
+  }
+
+  function toggleAuth() {
+    if (isLoggedIn) {
+      // Log out — clear the local end-user session.
+      isLoggedIn = false;
+      cgptSessionId = null;
+      renderAuthBtn();
+      showTooltip(document.getElementById('authBtn'), 'Logged out');
+      setTimeout(hideTooltip, 1500);
+    } else {
+      // Log in — open CustomGPT auth in a new tab. A real deployment flips
+      // state on the auth callback; here we flip optimistically so both
+      // the login and logout states are demoable.
+      window.open(CGPT_LOGIN_URL, '_blank', 'noopener');
+      isLoggedIn = true;
+      renderAuthBtn();
+    }
+  }
+
+  async function cgptEnsureSession() {
+    if (cgptSessionId) return cgptSessionId;
+    const res = await fetch(`${CGPT_API}/projects/${CGPT_PID}/conversations`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${CGPT_KEY}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ name: 'Widget Chat' })
+    });
+    const json = await res.json();
+    cgptSessionId = json.data?.session_id;
+    return cgptSessionId;
+  }
+
+  async function cgptSend(prompt) {
+    const sid = await cgptEnsureSession();
+    console.log('[CGPT] session:', sid, '| sending:', prompt);
+
+    const res = await fetch(
+      `${CGPT_API}/projects/${CGPT_PID}/conversations/${sid}/messages`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${CGPT_KEY}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ prompt, response_source: 'default' })
+      }
+    );
+
+    const json = await res.json();
+    console.log('[CGPT] response:', json);
+
+    if (!res.ok) throw new Error(`API ${res.status}: ${json.message ?? JSON.stringify(json)}`);
+
+    const raw = (json.data?.openai_response
+      ?? json.data?.response
+      ?? json.data?.message
+      ?? json.message
+      ?? '').trim();
+
+    if (!raw) return { html: 'Sorry, I didn\'t get a response. Please try again.', citations: [] };
+
+    // Convert markdown links [label](url) → <a> tags
+    const html = raw.replace(
+      /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+      '<a href="$2" target="_blank" class="chat-link cta-tracked">$1</a>'
+    );
+
+    // Extract citations from response
+    const citationsRaw = json.data?.citations ?? json.data?.sources ?? json.citations ?? [];
+    const citations = citationsRaw.map(c => ({
+      title: c.title ?? c.name ?? c.source ?? 'Source',
+      url:   c.url  ?? c.link ?? c.href ?? null
+    })).filter(c => c.url);
+
+    return { html, citations };
+  }
+
+  const floatingTooltip = document.getElementById('floatingTooltip');
+  function showTooltip(el, text) {
+    const r = el.getBoundingClientRect();
+    floatingTooltip.textContent = text;
+    floatingTooltip.style.opacity = '1';
+    floatingTooltip.style.top = (r.top - 32) + 'px';
+    floatingTooltip.style.left = (r.left + r.width / 2) + 'px';
+    floatingTooltip.style.transform = 'translateX(-50%)';
+  }
+  function hideTooltip() { floatingTooltip.style.opacity = '0'; }
+
+  function toggleWidget() { isOpen ? closeWidget() : openWidget(); }
+
+  function showBadge(count) {
+    countEl.textContent = count;
+    badge.style.display = 'flex';
+    badge.classList.remove('badge-pop');
+    void badge.offsetWidth;
+    badge.classList.add('badge-pop');
+  }
+
+  const isMobile = () => window.innerWidth < 768;
+
+  function setThemeColor(color) {
+    document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.content = color);
+  }
+  function restoreThemeColor() {
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.querySelector('meta[name="theme-color"][media*="light"]').content = '#99E2BC';
+    document.querySelector('meta[name="theme-color"][media*="dark"]').content  = '#1a1625';
+  }
+
+  function openWidget() {
+    if (isOpen) return;
+    isOpen = true;
+    unread = 0;
+    sessionBotMsgs = 0;
+    badge.style.display = 'none';
+
+    collapsedView.style.transition = 'opacity 0.1s ease';
+    collapsedView.style.opacity = '0';
+
+    widget.style.overflow = 'hidden';
+    widget.classList.add('expanded');
+
+    if (isMobile()) {
+      document.getElementById('widgetAvatar').style.display = 'none';
+      setThemeColor('#7367F0');
+      // Mobile: slide up from bottom
+      expandedView.style.transition = 'none';
+      expandedView.style.transform = 'translateY(100%)';
+      expandedView.style.opacity = '1';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        expandedView.style.transition = 'transform 0.3s ease-out';
+        expandedView.style.transform = 'translateY(0)';
+        setTimeout(() => widgetInput.focus(), 320);
+      }));
+    } else {
+      // Desktop: slide up slightly + fade in
+      expandedView.style.transition = 'none';
+      expandedView.style.transform = 'translateY(28px)';
+      expandedView.style.opacity = '0';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        expandedView.style.transition = 'transform 0.2s ease-out, opacity 0.2s ease-out';
+        expandedView.style.transform = 'translateY(0)';
+        expandedView.style.opacity = '1';
+        setTimeout(() => widgetInput.focus(), 220);
+      }));
+    }
+  }
+
+  function shareConvo() {
+    const lines = [...messagesView.querySelectorAll('.msg-wrap')].map(w => {
+      const isUser = w.style.justifyContent === 'flex-end';
+      const text = w.querySelector('p')?.innerText || '';
+      return (isUser ? 'You: ' : 'Alden: ') + text;
+    }).filter(l => l.trim().length > 5);
+    const txt = lines.join('\n\n');
+    navigator.clipboard.writeText(txt).then(() => {
+      showTooltip(event.currentTarget, 'Copied!');
+      setTimeout(hideTooltip, 1500);
+    }).catch(() => {});
+  }
+
+  function downloadConvo() {
+    const lines = [...messagesView.querySelectorAll('.msg-wrap')].map(w => {
+      const isUser = w.style.justifyContent === 'flex-end';
+      const text = w.querySelector('p')?.innerText || '';
+      return (isUser ? 'You: ' : 'Alden: ') + text;
+    }).filter(l => l.trim().length > 5);
+    if (!lines.length) return;
+    const blob = new Blob([lines.join('\n\n')], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'conversation.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function resetConvo() {
+    messagesView.innerHTML = '';
+    messagesView.style.display = 'none';
+    welcomeView.style.display = 'flex';
+    inConvo = false;
+    sessionBotMsgs = 0;
+    cgptSessionId = null;
+  }
+
+  function closeWidget() {
+    if (!isOpen) return;
+    isOpen = false;
+    if (sessionBotMsgs > 0) showBadge(sessionBotMsgs);
+
+    if (isMobile()) {
+      // Mobile: slide down full screen in 300ms
+      expandedView.style.transition = 'transform 0.3s ease-in';
+      expandedView.style.transform = 'translateY(100%)';
+      setTimeout(() => {
+        widget.classList.remove('expanded');
+        widget.style.overflow = 'visible';
+        expandedView.style.transition = 'none';
+        expandedView.style.transform = '';
+        expandedView.style.opacity = '1';
+        collapsedView.style.transition = 'opacity 0.15s ease';
+        collapsedView.style.opacity = '1';
+        document.getElementById('widgetAvatar').style.display = '';
+        restoreThemeColor();
+      }, 300);
+    } else {
+      // Desktop: slide down slightly + fade out
+      expandedView.style.transition = 'transform 0.15s ease-in, opacity 0.15s ease-in';
+      expandedView.style.transform = 'translateY(20px)';
+      expandedView.style.opacity = '0';
+      setTimeout(() => {
+        widget.classList.remove('expanded');
+        widget.style.overflow = 'visible';
+        expandedView.style.transition = 'none';
+        expandedView.style.transform = '';
+        expandedView.style.opacity = '';
+        collapsedView.style.transition = 'opacity 0.15s ease';
+        collapsedView.style.opacity = '1';
+      }, 150);
+    }
+  }
+
+  function switchToConvo() {
+    if (inConvo) return;
+    inConvo = true;
+    welcomeView.style.display = 'none';
+    messagesView.style.display = 'flex';
+  }
+
+  // Stream HTML content char-by-char; tags are inserted instantly, text chars trickle out.
+  function streamHtml(container, html, onDone) {
+    // Tokenize into segments: {type:'tag'|'text', value:string}
+    const segments = [];
+    const tagRe = /<[^>]+>/g;
+    let last = 0, m;
+    while ((m = tagRe.exec(html)) !== null) {
+      if (m.index > last) segments.push({ type: 'text', value: html.slice(last, m.index) });
+      segments.push({ type: 'tag', value: m[0] });
+      last = m.index + m[0].length;
+    }
+    if (last < html.length) segments.push({ type: 'text', value: html.slice(last) });
+
+    // Build a flat char queue: tags as single "instant" entries, text as individual chars
+    const queue = [];
+    for (const seg of segments) {
+      if (seg.type === 'tag') {
+        queue.push({ instant: true, value: seg.value });
+      } else {
+        // Decode HTML entities so we stream the visible character
+        const decoded = seg.value
+          .replace(/&amp;/g, '&').replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>').replace(/&nbsp;/g, '\u00a0')
+          .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n));
+        for (const ch of decoded) queue.push({ instant: false, value: ch });
+      }
+    }
+
+    // Blinking cursor element
+    const cursor = document.createElement('span');
+    cursor.style.cssText = 'display:inline-block;width:2px;height:13px;background:#7367F0;vertical-align:text-bottom;margin-left:1px;animation:blink-cursor 0.7s step-end infinite;';
+    container.appendChild(cursor);
+
+    let i = 0;
+    function tick() {
+      if (i >= queue.length) {
+        cursor.remove();
+        onDone();
+        return;
+      }
+      const entry = queue[i++];
+      if (entry.instant) {
+        // Insert HTML tag by appending a temporary span and moving its children
+        const tmp = document.createElement('span');
+        tmp.innerHTML = entry.value + (queue[i] && !queue[i].instant ? '' : '');
+        // Insert before cursor
+        container.insertBefore(tmp, cursor);
+        tick(); // process next immediately
+      } else {
+        container.insertBefore(document.createTextNode(entry.value), cursor);
+        messagesView.scrollTop = messagesView.scrollHeight;
+        setTimeout(tick, 16);
+      }
+    }
+    tick();
+  }
+
+  function addMsg(text, role, citations = []) {
+    switchToConvo();
+    const wrap = document.createElement('div');
+    wrap.className = 'msg-wrap';
+    wrap.style.cssText = role === 'user'
+      ? 'display:flex; gap:8px; align-items:flex-end; justify-content:flex-end;'
+      : 'display:flex; gap:8px; align-items:flex-start;';
+
+    if (role === 'bot') {
+      const av = document.createElement('div');
+      av.style.cssText = 'width:28px; height:28px; border-radius:50%; overflow:hidden; flex-shrink:0; border:2px solid rgba(255,255,255,0.3); margin-top:2px;';
+      av.innerHTML = '<img src="avatar.png" style="width:100%;height:100%;object-fit:cover;"/>';
+      wrap.appendChild(av);
+    }
+
+    const col = document.createElement('div');
+    col.style.cssText = 'display:flex; flex-direction:column; max-width:78%;';
+
+    const bbl = document.createElement('div');
+    bbl.style.cssText = role === 'user'
+      ? 'background:rgba(255,255,255,0.22); border-radius:16px 16px 4px 16px; padding:10px 16px;'
+      : 'background:white; border-radius:16px 16px 16px 4px; padding:10px 16px;';
+
+    if (role === 'bot') {
+      sessionBotMsgs++;
+
+      // Streaming paragraph — text trickles in
+      const textP = document.createElement('p');
+      textP.style.cssText = 'font-size:16px;font-weight:500;margin:0;color:#171d1b;font-family:Manrope,sans-serif;line-height:1.55;';
+      bbl.appendChild(textP);
+      col.appendChild(bbl);
+      wrap.appendChild(col);
+      messagesView.appendChild(wrap);
+      messagesView.scrollTop = messagesView.scrollHeight;
+
+      streamHtml(textP, text, () => {
+        playPing();
+        // Trust line — appended after streaming completes
+        const trust = document.createElement('p');
+        trust.style.cssText = 'font-size:11px;font-weight:600;margin:8px 0 0;color:rgba(0,0,0,0.25);font-family:Manrope,sans-serif;display:flex;align-items:center;gap:4px;';
+        trust.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px; font-variation-settings:\'FILL\' 0,\'wght\' 300,\'GRAD\' 0,\'opsz\' 20;">lock</span> We never share your info.';
+        bbl.appendChild(trust);
+
+        // Action bar — appended after streaming completes, hidden until hover
+        const actions = document.createElement('div');
+        actions.className = 'msg-actions';
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'msg-action-btn'; copyBtn.title = 'Copy';
+        copyBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;">content_copy</span>';
+        copyBtn.addEventListener('click', () => copyMsg(copyBtn, text));
+        const upBtn = document.createElement('button');
+        upBtn.className = 'msg-action-btn'; upBtn.title = 'Helpful';
+        upBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;">thumb_up</span>';
+        upBtn.addEventListener('click', () => thumbsUp(upBtn));
+        const downBtn = document.createElement('button');
+        downBtn.className = 'msg-action-btn'; downBtn.title = 'Not helpful';
+        downBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;">thumb_down</span>';
+        downBtn.addEventListener('click', () => thumbsDown(downBtn));
+        actions.appendChild(copyBtn); actions.appendChild(upBtn); actions.appendChild(downBtn);
+        col.appendChild(actions);
+
+        // Citations — below the bubble as pill chips
+        if (citations.length) {
+          const cites = document.createElement('div');
+          cites.style.cssText = 'display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;';
+          citations.forEach(c => {
+            const a = document.createElement('a');
+            a.href = c.url; a.target = '_blank'; a.rel = 'noopener';
+            a.style.cssText = 'display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:#7367F0; font-family:Manrope,sans-serif; text-decoration:none; background:rgba(255,255,255,0.85); border:1px solid rgba(115,103,240,0.2); border-radius:20px; padding:4px 10px; max-width:200px; backdrop-filter:blur(4px);';
+            a.innerHTML = `<span class="material-symbols-outlined" style="font-size:12px; flex-shrink:0;">link</span><span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${c.title}</span>`;
+            cites.appendChild(a);
+          });
+          col.appendChild(cites);
+        }
+
+        // Sign up card — shown when bot response mentions sign up
+        if (/sign[\s-]?up/i.test(text)) {
+          const card = document.createElement('div');
+          card.style.cssText = 'margin-top:10px; padding:14px 16px; background:white; border-radius:16px; display:flex; align-items:center; justify-content:space-between; gap:12px; box-shadow:0 2px 8px rgba(0,0,0,0.07);';
+          card.innerHTML = `
+            <span style="font-size:13px; font-weight:600; color:#3a3a3a;">Create your free account</span>
+            <a href="https://app.customgpt.ai/auth/register" target="_blank" rel="noopener"
+              style="display:inline-flex; align-items:center; gap:6px; padding:8px 14px; background:#3a3a3a; border-radius:10px; text-decoration:none; font-size:12px; font-weight:700; color:white; white-space:nowrap; transition:background 0.15s ease; flex-shrink:0;"
+              onmouseenter="this.style.background='#222222'" onmouseleave="this.style.background='#3a3a3a'">
+              Sign up free
+              <span class="material-symbols-outlined" style="font-size:13px; color:rgba(255,255,255,0.85);">open_in_new</span>
+            </a>`;
+          col.appendChild(card);
+        }
+
+        // Pricing card — shown when user asked "See pricing"
+        if (lastUserMsg.trim().toLowerCase() === 'see pricing') {
+          const card = document.createElement('div');
+          card.style.cssText = 'margin-top:10px; padding:14px 16px; background:white; border-radius:16px; display:flex; align-items:center; justify-content:space-between; gap:12px; box-shadow:0 2px 8px rgba(0,0,0,0.07);';
+          card.innerHTML = `
+            <span style="font-size:13px; font-weight:600; color:#3a3a3a; font-family:Manrope,sans-serif;">View plans &amp; pricing</span>
+            <a href="https://customgpt.ai/pricing/" target="_blank" rel="noopener"
+              style="display:inline-flex; align-items:center; gap:6px; padding:8px 14px; background:#3a3a3a; border-radius:10px; text-decoration:none; font-size:12px; font-weight:700; color:white; font-family:Manrope,sans-serif; white-space:nowrap; transition:background 0.15s ease; flex-shrink:0;"
+              onmouseenter="this.style.background='#222222'" onmouseleave="this.style.background='#3a3a3a'">
+              Explore plans
+              <span class="material-symbols-outlined" style="font-size:13px; color:rgba(255,255,255,0.85);">open_in_new</span>
+            </a>`;
+          col.appendChild(card);
+        }
+
+        requestAnimationFrame(() => {
+          messagesView.scrollTop = messagesView.scrollHeight;
+        });
+      });
+
+      return wrap;
+    } else {
+      bbl.innerHTML = `<p style="font-size:16px;font-weight:500;margin:0;color:white;font-family:Manrope,sans-serif;">${text}</p>`;
+      col.appendChild(bbl);
+    }
+
+    wrap.appendChild(col);
+    messagesView.appendChild(wrap);
+    messagesView.scrollTop = messagesView.scrollHeight;
+    return wrap;
+  }
+
+  function copyMsg(btn, text) {
+    navigator.clipboard.writeText(text.replace(/<[^>]+>/g, ''));
+    const icon = btn.querySelector('.material-symbols-outlined');
+    icon.textContent = 'check';
+    setTimeout(() => { icon.textContent = 'content_copy'; }, 1500);
+  }
+  function thumbsUp(btn) {
+    btn.classList.toggle('active-up');
+    btn.closest('.msg-actions').querySelector('.active-down')?.classList.remove('active-down');
+  }
+  function thumbsDown(btn) {
+    btn.classList.toggle('active-down');
+    btn.closest('.msg-actions').querySelector('.active-up')?.classList.remove('active-up');
+  }
+
+  const AGENT_JOBS = [
+    'Searching knowledge base…',
+    'Reading your question…',
+    'Crafting a response…',
+    'Checking sources…',
+    'Personalizing answer…',
+    'Almost there…',
+    'Verifying details…',
+    'Pulling insights…',
+  ];
+
+  function addTypingIndicator() {
+    switchToConvo();
+    const wrap = document.createElement('div');
+    wrap.id = 'typingDots';
+    wrap.style.cssText = 'display:flex; gap:8px; align-items:flex-end;';
+    const av = document.createElement('div');
+    av.style.cssText = 'width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid rgba(115,103,240,0.2);';
+    av.innerHTML = '<img src="avatar.png" style="width:100%;height:100%;object-fit:cover;"/>';
+    const bbl = document.createElement('div');
+    bbl.style.cssText = 'background:white;border-radius:16px 16px 16px 4px;padding:10px 16px;min-width:48px;';
+    bbl.innerHTML = '<span class="dot" style="color:#171d1b;font-size:20px;">·</span><span class="dot" style="color:#171d1b;font-size:20px;">·</span><span class="dot" style="color:#171d1b;font-size:20px;">·</span>';
+    wrap.appendChild(av); wrap.appendChild(bbl);
+    messagesView.appendChild(wrap);
+    messagesView.scrollTop = messagesView.scrollHeight;
+
+    // After 3s, swap dots for cycling job labels
+    wrap._jobTimer = setTimeout(() => {
+      let idx = 0;
+      function showJob() {
+        if (!wrap.isConnected) return;
+        const span = document.createElement('span');
+        span.className = 'agent-job';
+        span.style.cssText = 'font-size:12px;font-weight:500;color:#7367F0;font-family:Manrope,sans-serif;display:inline-block;white-space:nowrap;';
+        span.textContent = AGENT_JOBS[idx % AGENT_JOBS.length];
+        bbl.innerHTML = '';
+        bbl.appendChild(span);
+        idx++;
+        wrap._cycleTimer = setTimeout(showJob, 1800);
+      }
+      showJob();
+    }, 3000);
+
+    return wrap;
+  }
+
+  async function botReply() {
+    sendBtn.classList.remove('active');
+    sendBtn.classList.add('loading');
+    const typing = addTypingIndicator();
+    try {
+      const { html, citations } = await cgptSend(lastUserMsg);
+      clearTimeout(typing._jobTimer);
+      clearTimeout(typing._cycleTimer);
+      typing.remove();
+      sendBtn.classList.remove('loading');
+      addMsg(html, 'bot', citations);
+      if (!isOpen) { unread++; showBadge(unread); }
+    } catch (err) {
+      console.error('[CGPT] error:', err);
+      clearTimeout(typing._jobTimer);
+      clearTimeout(typing._cycleTimer);
+      typing.remove();
+      sendBtn.classList.remove('loading');
+      addMsg(`Connection error: ${err.message}`, 'bot');
+    }
+  }
+
+
+  // Send button: inactive → active on input content
+  widgetInput.addEventListener('input', () => {
+    sendBtn.classList.toggle('active', widgetInput.value.trim().length > 0);
+    widgetInput.style.height = 'auto';
+    const lineH = parseFloat(getComputedStyle(widgetInput).lineHeight) || 19.5;
+    const maxH = lineH * 7;
+    widgetInput.style.height = Math.min(widgetInput.scrollHeight, maxH) + 'px';
+  });
+
+  // Track link clicks for lead capture gating
+  messagesView.addEventListener('click', e => {
+    if (e.target.closest('.cta-tracked')) hasClickedLink = true;
+  });
+
+  function sendWidgetMessage(text) {
+    if (sendBtn.classList.contains('loading')) return;
+    const msg = text !== undefined ? text : widgetInput.value.trim();
+    if (!msg) return;
+    widgetInput.value = '';
+    widgetInput.style.height = 'auto';
+    sendBtn.classList.remove('active');
+    lastUserMsg = msg;
+    turnCount++;
+    addMsg(msg, 'user');
+    botReply();
+  }
+
+  function sendPopular(question) {
+    openWidget();
+    lastUserMsg = question;
+    turnCount++;
+    setTimeout(() => {
+      addMsg(question, 'user');
+      botReply();
+    }, 350);
+  }
+
+  // ── Hide input on scroll, show on scroll stop ──
+  let scrollHideTimer;
+  messagesView.addEventListener('scroll', () => {
+    const distFromBottom = messagesView.scrollHeight - messagesView.scrollTop - messagesView.clientHeight;
+    const threshold = inputArea.offsetHeight * 2;
+    if (distFromBottom > threshold) {
+      inputArea.style.opacity = '0';
+      inputArea.style.transform = 'translateY(24px)';
+      inputArea.style.pointerEvents = 'none';
+    }
+    clearTimeout(scrollHideTimer);
+    scrollHideTimer = setTimeout(() => {
+      inputArea.style.opacity = '1';
+      inputArea.style.transform = 'translateY(0)';
+      inputArea.style.pointerEvents = 'auto';
+    }, 800);
+  });
+
+  // ── Powered-by show/hide on input hover/focus ──
+  const poweredBy = document.getElementById('poweredBy');
+  const inputArea = document.getElementById('inputArea');
+  inputArea.addEventListener('mouseenter', () => { poweredBy.style.opacity = '1'; poweredBy.style.pointerEvents = 'auto'; });
+  inputArea.addEventListener('mouseleave', () => { if (!inputArea.contains(document.activeElement)) { poweredBy.style.opacity = '0'; poweredBy.style.pointerEvents = 'none'; } });
+  widgetInput.addEventListener('focus', () => { poweredBy.style.opacity = '1'; poweredBy.style.pointerEvents = 'auto'; });
+  widgetInput.addEventListener('blur',  () => { poweredBy.style.opacity = '0'; poweredBy.style.pointerEvents = 'none'; });
+
+  // ── Initialise login/logout control visibility ──
+  renderAuthBtn();
+
+  // ── Delayed reveal of avatar + chat bubble ──
+  setTimeout(() => {
+    const avatar = document.getElementById('widgetAvatar');
+    const collapsed = document.getElementById('collapsedView');
+    avatar.style.opacity = '1';
+    widget.style.opacity = '1';
+    avatar.classList.add('burst-pop');
+    collapsed.classList.add('burst-pop');
+  }, 2500);
+
+  // ── Ping sound on bot reply complete ──
+  function playPing() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1400, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1800, ctx.currentTime + 0.06);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.35);
+      osc.onended = () => ctx.close();
+    } catch(e) {}
+  }
+
+
+  // ── Cursor glow ──
+  (function() {
+    const glow = document.getElementById('cursorGlow');
+    widget.addEventListener('mousemove', e => {
+      if (isMobile()) return;
+      const rect = widget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      glow.style.background = `radial-gradient(circle 140px at ${x}px ${y}px, rgba(255,255,255,0.04) 0%, transparent 70%)`;
+    });
+  })();
+
+  // ── Resize chat window ──
+  (function() {
+    const handle = document.getElementById('resizeHandle');
+    let dragging = false, startX, startY, startW, startH;
+
+    handle.addEventListener('mousedown', e => {
+      if (isMobile()) return;
+      dragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startW = widget.offsetWidth;
+      startH = widget.offsetHeight;
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const dw = startX - e.clientX;
+      const dh = startY - e.clientY;
+      const minW = 300, maxW = Math.min(700, window.innerWidth - 40);
+      const minH = 540, maxH = window.innerHeight - 40;
+      const newW = Math.min(maxW, Math.max(minW, startW + dw));
+      const newH = Math.min(maxH, Math.max(minH, startH + dh));
+      widget.style.width  = newW + 'px';
+      widget.style.height = newH + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      document.body.style.userSelect = '';
+    });
+  })();
+</script>
+</body></html>
