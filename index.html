@@ -288,6 +288,25 @@
           animation: spin 0.7s linear infinite;
         }
         #authBtn.loading #authIcon { opacity: 0; }
+        /* CustomGPT design-system tokens for the login UX surfaces */
+        #limitBanner, #userMenu {
+          background: #FFFFFF;                                  /* bg-surface */
+          box-shadow: 0px 5px 20px 0px rgba(75,70,92,0.40);    /* shadow-modal */
+        }
+        .cg-btn-primary {
+          background: #7367F0; color:#fff; border:none;        /* brand-primary-default */
+          transition: background .12s cubic-bezier(.2,.7,.3,1);
+        }
+        .cg-btn-primary:hover  { background:#685DD8; }          /* brand-primary-hover */
+        .cg-btn-primary:active { background:#5C53C0; }          /* brand-primary-active */
+        .cg-btn-ghost {
+          background:transparent; color:#565656;               /* text-body */
+          border:1px solid #E5E5E5;                            /* border-default */
+          transition: background .12s cubic-bezier(.2,.7,.3,1);
+        }
+        .cg-btn-ghost:hover { background:#F5F5F5; }             /* bg-selected */
+        .cg-menu-item { transition: background .12s cubic-bezier(.2,.7,.3,1); }
+        .cg-menu-item:hover { background:#F5F5F5; }             /* bg-selected */
         .tooltip-wrap { position: absolute; top: 14px; right: 14px; z-index: 10; }
         #floatingTooltip {
           position: fixed;
@@ -566,17 +585,17 @@
     <!-- Limit-reached banner — appears above the input when a guest hits the
          message allowance. Contextual login CTA at the moment of friction
          (PXO Step 05 "aha moment" / Step 09 escalated CTA). -->
-    <div id="limitBanner" style="display:none; position:absolute; bottom:96px; left:16px; right:16px; z-index:11; background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:16px; padding:14px 16px; box-shadow:0 8px 30px rgba(0,0,0,0.18); border:1px solid rgba(255,255,255,0.7);">
-      <div style="display:flex; align-items:flex-start; gap:10px;">
+    <div id="limitBanner" style="display:none; position:absolute; bottom:96px; left:16px; right:16px; z-index:11; border-radius:16px; padding:16px;">
+      <div style="display:flex; align-items:flex-start; gap:12px;">
         <span class="material-symbols-outlined" style="color:#7367F0; font-size:20px; flex-shrink:0;">lock</span>
         <div style="flex:1; min-width:0;">
-          <p style="font-weight:700; font-size:13px; color:#171d1b; margin:0 0 2px; font-family:Manrope,sans-serif;">You've reached the guest limit</p>
-          <p style="font-size:12px; color:#5a635d; margin:0; font-family:Manrope,sans-serif; line-height:1.4;">Log in to continue and keep your conversation history.</p>
+          <p style="font-weight:600; font-size:13px; line-height:20px; color:#212121; margin:0 0 4px; font-family:Manrope,sans-serif;">You've reached the guest limit</p>
+          <p style="font-size:13px; line-height:20px; color:#565656; margin:0; font-family:Manrope,sans-serif;">Log in to continue and keep your conversation history.</p>
         </div>
       </div>
-      <div style="display:flex; gap:8px; margin-top:12px;">
-        <button onclick="doLogin()" style="flex:1; background:#7367F0; color:#fff; border:none; border-radius:12px; padding:10px 14px; font-size:13px; font-weight:700; font-family:Manrope,sans-serif; cursor:pointer;">Log in to continue</button>
-        <button onclick="dismissLimitBanner()" style="background:rgba(0,0,0,0.05); color:#5a635d; border:none; border-radius:12px; padding:10px 14px; font-size:13px; font-weight:600; font-family:Manrope,sans-serif; cursor:pointer;">Not now</button>
+      <div style="display:flex; gap:8px; margin-top:16px;">
+        <button onclick="doLogin()" class="cg-btn-primary" style="flex:1; border-radius:8px; padding:10px 16px; font-size:14px; font-weight:600; font-family:Manrope,sans-serif; cursor:pointer;">Log in to continue</button>
+        <button onclick="dismissLimitBanner()" class="cg-btn-ghost" style="border-radius:8px; padding:10px 16px; font-size:14px; font-weight:500; font-family:Manrope,sans-serif; cursor:pointer;">Not now</button>
       </div>
     </div>
 
@@ -592,25 +611,25 @@
     </div>
     <!-- User menu — opens from the auth icon when logged in (PXO Step 05
          "control moment": identity, history status, and a visible Logout). -->
-    <div id="userMenu" style="display:none; position:absolute; top:52px; right:14px; z-index:20; width:236px; background:#fff; border-radius:14px; box-shadow:0 10px 34px rgba(0,0,0,0.22); overflow:hidden; font-family:Manrope,sans-serif;">
-      <div style="display:flex; align-items:center; gap:10px; padding:14px 14px 12px;">
-        <div style="width:34px; height:34px; border-radius:50%; background:#7367F0; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0;">A</div>
+    <div id="userMenu" style="display:none; position:absolute; top:52px; right:14px; z-index:20; width:236px; border-radius:16px; overflow:hidden; font-family:Manrope,sans-serif;">
+      <div style="display:flex; align-items:center; gap:12px; padding:16px 16px 12px;">
+        <div style="width:36px; height:36px; border-radius:50%; background:#7367F0; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; flex-shrink:0;">A</div>
         <div style="min-width:0;">
-          <p id="userMenuName" style="font-size:13px; font-weight:700; color:#171d1b; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Signed in</p>
-          <p id="userMenuEmail" style="font-size:11px; color:#8a938c; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">guest@example.com</p>
+          <p id="userMenuName" style="font-size:13px; line-height:20px; font-weight:600; color:#212121; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Signed in</p>
+          <p id="userMenuEmail" style="font-size:11px; line-height:16px; color:#B7B5BE; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">guest@example.com</p>
         </div>
       </div>
-      <div style="display:flex; align-items:center; gap:8px; padding:8px 14px; margin:0 8px 6px; background:#f1faf5; border-radius:10px;">
-        <span class="material-symbols-outlined" style="color:#28a745; font-size:18px;">cloud_done</span>
-        <span style="font-size:12px; color:#206b4c; font-weight:600;">History is saved</span>
+      <div style="display:flex; align-items:center; gap:8px; padding:8px 12px; margin:0 8px 8px; background:#F5F5F5; border-radius:8px;">
+        <span class="material-symbols-outlined" style="color:#28C76F; font-size:18px;">cloud_done</span>
+        <span style="font-size:13px; color:#28C76F; font-weight:500;">History is saved</span>
       </div>
-      <button onclick="doLogout()" style="width:100%; text-align:left; display:flex; align-items:center; gap:10px; padding:12px 16px; background:none; border:none; border-top:1px solid #f0f0f0; cursor:pointer; font-size:13px; font-weight:600; color:#171d1b; font-family:Manrope,sans-serif;">
-        <span class="material-symbols-outlined" style="font-size:18px; color:#5a635d;">logout</span>Log out
+      <button onclick="doLogout()" class="cg-menu-item" style="width:100%; text-align:left; display:flex; align-items:center; gap:12px; padding:12px 16px; background:none; border:none; border-top:1px solid #E5E5E5; cursor:pointer; font-size:13px; font-weight:500; color:#212121; font-family:Manrope,sans-serif;">
+        <span class="material-symbols-outlined" style="font-size:18px; color:#565656;">logout</span>Log out
       </button>
     </div>
 
     <!-- Toast — transient confirmation (login success, logout). -->
-    <div id="authToast" style="display:none; position:absolute; bottom:96px; left:50%; transform:translateX(-50%) translateY(8px); z-index:21; opacity:0; transition:opacity 0.25s ease, transform 0.25s ease; background:#171d1b; color:#fff; padding:10px 16px; border-radius:999px; font-size:12.5px; font-weight:600; font-family:Manrope,sans-serif; box-shadow:0 8px 24px rgba(0,0,0,0.25); white-space:nowrap; display:flex; align-items:center; gap:8px;">
+    <div id="authToast" style="display:none; position:absolute; bottom:96px; left:50%; transform:translateX(-50%) translateY(8px); z-index:21; opacity:0; transition:opacity 0.25s cubic-bezier(.2,.7,.3,1), transform 0.25s cubic-bezier(.2,.7,.3,1); background:#212121; color:#fff; padding:10px 16px; border-radius:999px; font-size:13px; font-weight:500; font-family:Manrope,sans-serif; box-shadow:0px 5px 20px 0px rgba(75,70,92,0.40); white-space:nowrap; display:flex; align-items:center; gap:8px;">
       <span id="authToastIcon" class="material-symbols-outlined" style="font-size:17px;">check_circle</span>
       <span id="authToastText">You're logged in</span>
     </div>
