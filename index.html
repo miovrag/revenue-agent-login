@@ -278,6 +278,16 @@
         }
         #sendBtn.loading .send-spinner { opacity: 1; }
         #sendBtn { position: relative; }
+        /* Auth button loading spinner (during sign-in) */
+        #authBtn .auth-spinner {
+          position: absolute;
+          width: 14px; height: 14px;
+          border: 2px solid rgba(255,255,255,0.35);
+          border-top-color: white;
+          border-radius: 50%;
+          animation: spin 0.7s linear infinite;
+        }
+        #authBtn.loading #authIcon { opacity: 0; }
         .tooltip-wrap { position: absolute; top: 14px; right: 14px; z-index: 10; }
         #floatingTooltip {
           position: fixed;
@@ -498,10 +508,11 @@
            Shown when the agent is public AND the visitor benefits from signing in:
            end-user history is available OR guests have a limited message allowance.
            Present in every chat state (with and without a conversation). -->
-      <button id="authBtn" onclick="toggleAuth()"
-        onmouseenter="showTooltip(this, isLoggedIn ? 'Log out' : 'Log in')" onmouseleave="hideTooltip()"
-        class="close-btn" style="display:none; width:32px; height:32px; border-radius:50%; border:none; background:rgba(255,255,255,0.15); cursor:pointer; align-items:center; justify-content:center;">
+      <button id="authBtn" onclick="onAuthClick(event)"
+        onmouseenter="showTooltip(this, isLoggedIn ? 'User menu' : 'Log in')" onmouseleave="hideTooltip()"
+        class="close-btn" style="display:none; width:32px; height:32px; border-radius:50%; border:none; background:rgba(255,255,255,0.15); cursor:pointer; align-items:center; justify-content:center; position:relative;">
         <span id="authIcon" class="material-symbols-outlined" style="color:white; font-size:18px; font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20;">login</span>
+        <span id="authSpinner" class="auth-spinner" style="display:none;"></span>
       </button>
       <button onclick="shareConvo()"
         onmouseenter="showTooltip(this,'Share')" onmouseleave="hideTooltip()"
@@ -552,6 +563,23 @@
     <!-- Messages view -->
     <div id="messagesView" style="display:none; flex:1; min-height:0; overflow-y:auto; padding:56px 16px 140px; flex-direction:column; gap:10px;"></div>
 
+    <!-- Limit-reached banner — appears above the input when a guest hits the
+         message allowance. Contextual login CTA at the moment of friction
+         (PXO Step 05 "aha moment" / Step 09 escalated CTA). -->
+    <div id="limitBanner" style="display:none; position:absolute; bottom:96px; left:16px; right:16px; z-index:11; background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:16px; padding:14px 16px; box-shadow:0 8px 30px rgba(0,0,0,0.18); border:1px solid rgba(255,255,255,0.7);">
+      <div style="display:flex; align-items:flex-start; gap:10px;">
+        <span class="material-symbols-outlined" style="color:#7367F0; font-size:20px; flex-shrink:0;">lock</span>
+        <div style="flex:1; min-width:0;">
+          <p style="font-weight:700; font-size:13px; color:#171d1b; margin:0 0 2px; font-family:Manrope,sans-serif;">You've reached the guest limit</p>
+          <p style="font-size:12px; color:#5a635d; margin:0; font-family:Manrope,sans-serif; line-height:1.4;">Log in to continue and keep your conversation history.</p>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button onclick="doLogin()" style="flex:1; background:#7367F0; color:#fff; border:none; border-radius:12px; padding:10px 14px; font-size:13px; font-weight:700; font-family:Manrope,sans-serif; cursor:pointer;">Log in to continue</button>
+        <button onclick="dismissLimitBanner()" style="background:rgba(0,0,0,0.05); color:#5a635d; border:none; border-radius:12px; padding:10px 14px; font-size:13px; font-weight:600; font-family:Manrope,sans-serif; cursor:pointer;">Not now</button>
+      </div>
+    </div>
+
     <!-- Input bar — overlays messages -->
     <div id="inputArea" style="position:absolute; bottom:28px; left:16px; right:16px; border-radius:16px; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.6); display:flex; align-items:flex-end; padding:6px 6px 6px 16px; z-index:10;">
       <textarea id="widgetInput" rows="1" placeholder="Ask me anything about CustomGPT.ai"
@@ -562,6 +590,31 @@
         <span class="send-spinner"></span>
       </button>
     </div>
+    <!-- User menu — opens from the auth icon when logged in (PXO Step 05
+         "control moment": identity, history status, and a visible Logout). -->
+    <div id="userMenu" style="display:none; position:absolute; top:52px; right:14px; z-index:20; width:236px; background:#fff; border-radius:14px; box-shadow:0 10px 34px rgba(0,0,0,0.22); overflow:hidden; font-family:Manrope,sans-serif;">
+      <div style="display:flex; align-items:center; gap:10px; padding:14px 14px 12px;">
+        <div style="width:34px; height:34px; border-radius:50%; background:#7367F0; color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0;">A</div>
+        <div style="min-width:0;">
+          <p id="userMenuName" style="font-size:13px; font-weight:700; color:#171d1b; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Signed in</p>
+          <p id="userMenuEmail" style="font-size:11px; color:#8a938c; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">guest@example.com</p>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; padding:8px 14px; margin:0 8px 6px; background:#f1faf5; border-radius:10px;">
+        <span class="material-symbols-outlined" style="color:#28a745; font-size:18px;">cloud_done</span>
+        <span style="font-size:12px; color:#206b4c; font-weight:600;">History is saved</span>
+      </div>
+      <button onclick="doLogout()" style="width:100%; text-align:left; display:flex; align-items:center; gap:10px; padding:12px 16px; background:none; border:none; border-top:1px solid #f0f0f0; cursor:pointer; font-size:13px; font-weight:600; color:#171d1b; font-family:Manrope,sans-serif;">
+        <span class="material-symbols-outlined" style="font-size:18px; color:#5a635d;">logout</span>Log out
+      </button>
+    </div>
+
+    <!-- Toast — transient confirmation (login success, logout). -->
+    <div id="authToast" style="display:none; position:absolute; bottom:96px; left:50%; transform:translateX(-50%) translateY(8px); z-index:21; opacity:0; transition:opacity 0.25s ease, transform 0.25s ease; background:#171d1b; color:#fff; padding:10px 16px; border-radius:999px; font-size:12.5px; font-weight:600; font-family:Manrope,sans-serif; box-shadow:0 8px 24px rgba(0,0,0,0.25); white-space:nowrap; display:flex; align-items:center; gap:8px;">
+      <span id="authToastIcon" class="material-symbols-outlined" style="font-size:17px;">check_circle</span>
+      <span id="authToastText">You're logged in</span>
+    </div>
+
     <!-- Powered-by footer -->
     <div id="poweredBy" style="opacity:0; transition:opacity 0.2s ease; pointer-events:none; position:absolute; bottom:4px; left:0; right:0; height:24px; display:flex; align-items:center; justify-content:center; z-index:10;">
       <span style="font-size:11px; font-weight:500; color:rgba(255,255,255,0.38); letter-spacing:0.01em;">Powered by <a href="https://customgpt.ai" target="_blank" style="color:rgba(255,255,255,0.5); text-decoration:none; font-weight:600;">CustomGPT.ai</a></span>
@@ -633,31 +686,108 @@
       (!authConfig.endUserHistoryHidden || !authConfig.guestLimitUnlimited);
   }
 
+  // Guests get a limited message allowance; logging in lifts it. The banner
+  // and counter are only meaningful when the guest limit isn't unlimited.
+  const GUEST_LIMIT = 3;   // demo allowance for an anonymous visitor
+  let guestTurns = 0;
+  let authLoading = false;
+
   function renderAuthBtn() {
     const btn  = document.getElementById('authBtn');
     const icon = document.getElementById('authIcon');
     if (!shouldShowAuth()) { btn.style.display = 'none'; return; }
     btn.style.display = 'flex';
-    icon.textContent = isLoggedIn ? 'logout' : 'login';
+    icon.textContent = isLoggedIn ? 'account_circle' : 'login';
+    icon.style.fontVariationSettings = isLoggedIn
+      ? "'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 20"
+      : "'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 20";
   }
 
-  function toggleAuth() {
-    if (isLoggedIn) {
-      // Log out — clear the local end-user session.
-      isLoggedIn = false;
-      cgptSessionId = null;
-      renderAuthBtn();
-      showTooltip(document.getElementById('authBtn'), 'Logged out');
-      setTimeout(hideTooltip, 1500);
-    } else {
-      // Log in — open CustomGPT auth in a new tab. A real deployment flips
-      // state on the auth callback; here we flip optimistically so both
-      // the login and logout states are demoable.
-      window.open(CGPT_LOGIN_URL, '_blank', 'noopener');
-      isLoggedIn = true;
-      renderAuthBtn();
-    }
+  // Click routing: logged-out → start sign-in; logged-in → toggle user menu.
+  function onAuthClick(e) {
+    if (e) e.stopPropagation();
+    if (authLoading) return;
+    if (isLoggedIn) { toggleUserMenu(); }
+    else { doLogin(); }
   }
+
+  function doLogin() {
+    if (isLoggedIn || authLoading) return;
+    dismissLimitBanner();
+    hideTooltip();
+    // Loading state while auth resolves. A real deployment flips state on the
+    // auth callback (popup/redirect); here we simulate the round-trip so both
+    // states are demoable, and we'd fall back to a redirect if the popup is
+    // blocked (PXO Step 07 failure 1).
+    authLoading = true;
+    const btn = document.getElementById('authBtn');
+    btn.classList.add('loading');
+    document.getElementById('authSpinner').style.display = 'block';
+    const popup = window.open(CGPT_LOGIN_URL, '_blank', 'noopener');
+    if (!popup) { /* popup blocked → real flow would redirect in-page */ }
+
+    setTimeout(() => {
+      authLoading = false;
+      btn.classList.remove('loading');
+      document.getElementById('authSpinner').style.display = 'none';
+      isLoggedIn = true;
+      guestTurns = 0;            // allowance lifted
+      renderAuthBtn();
+      showAuthToast('You\'re logged in — history is saved', 'check_circle');
+    }, 1200);
+  }
+
+  function doLogout() {
+    isLoggedIn = false;
+    cgptSessionId = null;
+    guestTurns = 0;
+    closeUserMenu();
+    renderAuthBtn();
+    showAuthToast('Logged out — continuing as guest', 'logout');
+  }
+
+  function toggleUserMenu() {
+    const m = document.getElementById('userMenu');
+    if (m.style.display === 'block') { closeUserMenu(); }
+    else { hideTooltip(); m.style.display = 'block'; }
+  }
+  function closeUserMenu() { document.getElementById('userMenu').style.display = 'none'; }
+
+  // Close the user menu when clicking elsewhere.
+  document.addEventListener('click', (e) => {
+    const m = document.getElementById('userMenu');
+    if (m.style.display !== 'block') return;
+    if (m.contains(e.target) || e.target.closest('#authBtn')) return;
+    closeUserMenu();
+  });
+
+  let authToastTimer;
+  function showAuthToast(text, icon) {
+    const t = document.getElementById('authToast');
+    document.getElementById('authToastText').textContent = text;
+    document.getElementById('authToastIcon').textContent = icon || 'check_circle';
+    t.style.display = 'flex';
+    void t.offsetWidth;
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(authToastTimer);
+    authToastTimer = setTimeout(() => {
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(-50%) translateY(8px)';
+      setTimeout(() => { t.style.display = 'none'; }, 250);
+    }, 2400);
+  }
+
+  // Returns true if the guest is blocked (limit hit, not logged in) — the
+  // caller should stop and let the banner do the talking.
+  function guestLimitBlocks() {
+    if (isLoggedIn) return false;
+    if (authConfig.guestLimitUnlimited) return false;
+    if (guestTurns >= GUEST_LIMIT) { showLimitBanner(); return true; }
+    return false;
+  }
+  function showLimitBanner() { if (shouldShowAuth()) document.getElementById('limitBanner').style.display = 'block'; }
+  function dismissLimitBanner() { document.getElementById('limitBanner').style.display = 'none'; }
 
   async function cgptEnsureSession() {
     if (cgptSessionId) return cgptSessionId;
@@ -1154,19 +1284,23 @@
     if (sendBtn.classList.contains('loading')) return;
     const msg = text !== undefined ? text : widgetInput.value.trim();
     if (!msg) return;
+    if (guestLimitBlocks()) return;   // guest allowance reached → show login banner
     widgetInput.value = '';
     widgetInput.style.height = 'auto';
     sendBtn.classList.remove('active');
     lastUserMsg = msg;
     turnCount++;
+    if (!isLoggedIn) guestTurns++;
     addMsg(msg, 'user');
     botReply();
   }
 
   function sendPopular(question) {
     openWidget();
+    if (guestLimitBlocks()) return;   // guest allowance reached → show login banner
     lastUserMsg = question;
     turnCount++;
+    if (!isLoggedIn) guestTurns++;
     setTimeout(() => {
       addMsg(question, 'user');
       botReply();
